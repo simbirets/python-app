@@ -48,11 +48,11 @@ jobs:
         run: ./backup/pg_backup.sh test_mode
 
       - name: Start app and test /health
-      working-directory: ./app
+        working-directory: ./app
         run: |
-          export DB_HOST=localhost
-          export DB_PORT=5432
-          export DB_NAME=myapp
-          export DB_USER=myuser
-          export DB_PASSWORD=mypassword
-          timeout 30s bash -c 'until curl -s http://localhost:5000/health | grep -q "ok"; do python app.py & sleep 3; done'
+            export DB_HOST=localhost
+            export DB_PORT=5432
+            export DB_NAME=myapp
+            export DB_USER=myuser
+            export DB_PASSWORD=mypassword
+            timeout 30s bash -c 'until curl -s http://localhost:5000/health | grep -q "ok"; do python app.py & sleep 3; done'
