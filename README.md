@@ -1,6 +1,6 @@
 # DevOps Demo App
 
-A simple Flask + PostgreSQL app with CI and backup demo.
+A simple Flask + PostgreSQL app with CI.
 
 ## Local Run
 
