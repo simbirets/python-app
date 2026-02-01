@@ -11,7 +11,7 @@ jobs:
 
     services:
       postgres:
-        image: postgres:16
+        image: postgres:17
         env:
           POSTGRES_USER: myuser
           POSTGRES_PASSWORD: mypassword
@@ -31,7 +31,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.11'
+          python-version: '3.12'
 
       - name: Install dependencies
         run: |
@@ -40,7 +40,7 @@ jobs:
 
       - name: Run init SQL (simulate initdb)
         run: |
-          psql -h localhost -U myuser -d myapp -f infra/initdb/01-schema.sql
+          psql -h localhost -U myuser -d myapp -f infra/initdb/db.sql
         env:
           PGPASSWORD: mypassword
 
@@ -48,11 +48,12 @@ jobs:
         run: ./backup/pg_backup.sh test_mode
 
       - name: Start app and test /health
-        run: |
-          export DB_HOST=localhost
-          export DB_PORT=5432
-          export DB_NAME=myapp
-          export DB_USER=myuser
-          export DB_PASSWORD=mypassword
-          timeout 30s bash -c 'until curl -s http://localhost:5000/health | grep -q "ok"; do python app/app.py & sleep 3; done'
         working-directory: ./app
+          run: |
+            export DB_HOST=localhost
+            export DB_PORT=5432
+            export DB_NAME=myapp
+            export DB_USER=myuser
+            export DB_PASSWORD=mypassword
+            timeout 30s bash -c 'until curl -s http://localhost:5000/health | grep -q "ok"; do python app.py & sleep 3; done'
+
