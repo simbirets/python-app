@@ -1,9 +1,12 @@
 from flask import Flask, jsonify
+from prometheus_flask_exporter import PrometheusMetrics
 import os
 import psycopg2
 from psycopg2.extras import RealDictCursor
 
 app = Flask(__name__)
+
+metrics = PrometheusMetrics(app)
 
 DB_HOST = os.getenv("DB_HOST", "localhost")
 DB_PORT = os.getenv("DB_PORT", "5432")
